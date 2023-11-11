@@ -18,3 +18,6 @@ This is the original assignment that can be found [here](https://github.com/trav
 - [Circe decoder for generic case](https://stackoverflow.com/a/54401034)
 - [Either, Left, Right](https://alvinalexander.com/scala/scala-either-left-right-example-option-some-none-null/)
 - [Custom exceptions in Scala](https://stackoverflow.com/questions/38243530/custom-exception-in-scala)
+- [Custome decoders](https://circe.github.io/circe/codecs/custom-codecs.html)
+- [Circe and Scala versions](https://circe.github.io/circe/)
+- [Manual JSON decoding with circe](https://medium.com/@djoepramono/how-to-parse-json-in-scala-c024cb44f66b)
