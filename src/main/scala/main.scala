@@ -1,19 +1,12 @@
-import io.circe._, io.circe.parser._, io.circe.generic.semiauto._
+import _root_.parser.{LocationsParser, RegionsParser}
 
 @main
 def main(): Unit = {
+  val locationsObject = new LocationsParser()
+  val locations = locationsObject.parseToType("src/main/scala/input/locations.json")
 
-  case class Location(name: String, coordinates: List[Double])
+  val regionsObject = new RegionsParser()
+  val regions = regionsObject.parseToType("src/main/scala/input/regions.json")
 
-  val source = scala.io.Source.fromFile("src/main/scala/input/locations.json")
-  val jsonString = try source.mkString finally source.close()
-  val parseResult: Either[ParsingFailure, Json] = parse(jsonString)
-
-  parseResult match {
-    case Left(parsingError) =>
-      throw new IllegalArgumentException(s"Invalid JSON object: ${parsingError.message}")
-    case Right(json) =>
-      implicit val locationDecoder: Decoder[Location] = deriveDecoder[Location]
-      val locationDecoded = parser.decode[List[Location]](jsonString)
-  }
+  println("Finished")
 }
