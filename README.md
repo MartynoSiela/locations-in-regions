@@ -21,3 +21,5 @@ This is the original assignment that can be found [here](https://github.com/trav
 - [Custome decoders](https://circe.github.io/circe/codecs/custom-codecs.html)
 - [Circe and Scala versions](https://circe.github.io/circe/)
 - [Manual JSON decoding with circe](https://medium.com/@djoepramono/how-to-parse-json-in-scala-c024cb44f66b)
+- [Point in polygon](https://en.m.wikipedia.org/wiki/Point_in_polygon)
+- [Point in polygon](https://stackoverflow.com/questions/11716268/point-in-polygon-algorithm)
