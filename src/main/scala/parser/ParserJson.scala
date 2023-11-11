@@ -2,11 +2,12 @@ package parser
 
 import io.circe.*
 import io.circe.parser.*
+import scala.io.Source
 
 trait ParserJson[T: Decoder] {
 
-  def parseToType(filePath: String): Either[Error, List[T]] = {
-    val source = scala.io.Source.fromFile(filePath)
+  def parseToType(resourceName: String): Either[Error, List[T]] = {
+    val source = Source.fromResource(resourceName)
     val jsonString = try source.mkString finally source.close()
     val parseResult: Either[ParsingFailure, Json] = parse(jsonString)
 
