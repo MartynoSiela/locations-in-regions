@@ -44,9 +44,9 @@ object main {
     }
 
     val results: Either[Error, List[Result]] = (regions, locations) match {
-      case (Left(errorRegions), Left(errorLocations)) => throw errorRegions
-      case (Left(error), Right(list)) => throw error
-      case (Right(list), Left(error)) => throw error
+      case (Left(errorRegions), Left(_)) => throw errorRegions
+      case (Left(error), Right(_)) => throw error
+      case (Right(_), Left(error)) => throw error
       case (Right(regionList), Right(locationList)) =>
         val resultList = regionList.map { region =>
           val matchedLocationNames = region.polygons.flatMap { polygon =>
