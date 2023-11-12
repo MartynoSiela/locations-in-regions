@@ -6,8 +6,8 @@ import scala.io.Source
 
 trait ParserJson[T: Decoder] {
 
-  def parseToType(resourceName: String): Either[Error, List[T]] = {
-    val source = Source.fromResource(resourceName)
+  def parseToType(filePath: String): Either[Error, List[T]] = {
+    val source = Source.fromFile(filePath)
     val jsonString = try source.mkString finally source.close()
     val parseResult: Either[ParsingFailure, Json] = parse(jsonString)
 
