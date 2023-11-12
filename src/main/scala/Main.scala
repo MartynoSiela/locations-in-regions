@@ -3,7 +3,7 @@ import entities.Result
 import io.circe.syntax.*
 import scala.sys.exit
 
-object main {
+object Main {
   def main(args: Array[String]): Unit = {
     val usage = """
         Usage: [--regions String] [--locations String] [--output String]
@@ -15,7 +15,7 @@ object main {
 
     if (args.isEmpty || args.length % 2 != 0){
       println(usage)
-      exit
+      exit(1)
     }
 
     args.sliding(2, 2).toList.collect {
@@ -24,7 +24,7 @@ object main {
       case Array("--output", value: String) => outputFilePath = value
       case _ =>
         println(usage)
-        exit
+        exit(1)
     }
 
     val parserLocations = new ParserLocations()
@@ -43,21 +43,7 @@ object main {
       case _ => parserRegions.parseToType(regionsFilePath)
     }
 
-    val results: Either[Error, List[Result]] = (regions, locations) match {
-      case (Left(errorRegions), Left(_)) => throw errorRegions
-      case (Left(error), Right(_)) => throw error
-      case (Right(_), Left(error)) => throw error
-      case (Right(regionList), Right(locationList)) =>
-        val resultList = regionList.map { region =>
-          val matchedLocationNames = region.polygons.flatMap { polygon =>
-            locationList.filter(location => region.isPointInPolygon(location.point, polygon))
-              .map(_.name)
-          }
-          Result(region.name, matchedLocationNames)
-        }
-        Right(resultList)
-    }
-
+    val results = Result.generateResults(regions, locations)
     results.match {
       case Right(results) =>
         outputFilePath match {
@@ -70,5 +56,6 @@ object main {
     }
 
     println("Finished")
+    exit(0)
   }
 }
