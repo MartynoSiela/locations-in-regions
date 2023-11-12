@@ -28,10 +28,20 @@ object main {
     }
 
     val parserLocations = new ParserLocations()
-    val locations = parserLocations.parseToType(locationsFilePath)
+    val locations = locationsFilePath match {
+      case "" =>
+        println("Locations file location was not provided")
+        exit(1)
+      case _ => parserLocations.parseToType(locationsFilePath)
+    }
 
     val parserRegions = new ParserRegions()
-    val regions = parserRegions.parseToType(regionsFilePath)
+    val regions = regionsFilePath match {
+      case "" =>
+        println("Regions file location was not provided")
+        exit(1)
+      case _ => parserRegions.parseToType(regionsFilePath)
+    }
 
     val results: Either[Error, List[Result]] = (regions, locations) match {
       case (Left(errorRegions), Left(errorLocations)) => throw errorRegions
@@ -49,7 +59,13 @@ object main {
     }
 
     results.match {
-      case Right(results) => Result.writeToFile(results, outputFilePath)
+      case Right(results) =>
+        outputFilePath match {
+          case "" =>
+            println("Output file location was not provided")
+            exit(1)
+          case _ => Result.writeToFile(results, outputFilePath)
+        }
       case Left(error) => throw error
     }
 
