@@ -16,13 +16,14 @@ object Result {
       case (Left(error), Right(_)) => throw error
       case (Right(_), Left(error)) => throw error
       case (Right(regionList), Right(locationList)) =>
-        val resultList = regionList.map { region =>
-          val matchedLocationNames = region.polygons.flatMap { polygon =>
-            locationList.filter(location => region.isPointInPolygon(location.point, polygon))
-              .map(_.name)
-          }
-          Result(region.name, matchedLocationNames)
-        }
+        val resultList =
+          for region <- regionList
+          yield
+            val matchedLocationNames =
+              for polygon <- region.polygons
+                  location <- locationList if region.isPointInPolygon(location.point, polygon)
+              yield location.name
+            Result(region.name, matchedLocationNames)
         Right(resultList)
     }
   }
