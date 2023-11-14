@@ -1,12 +1,13 @@
-package parser
+package parserJson
 
 import java.io.FileNotFoundException
+import entities.*
 import io.circe.*
 import io.circe.parser.*
 import scala.io.Source
 import scala.sys.exit
 
-trait ParserJson[T: Decoder] {
+trait Parser[T: Decoder] {
 
   def parseToType(filePath: String): Either[Error, List[T]] = {
     var jsonString = ""
