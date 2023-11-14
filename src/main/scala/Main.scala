@@ -2,8 +2,6 @@ import _root_.parserJson.{ParserLocations, ParserRegions}
 import entities.Result
 import io.circe.syntax.*
 
-import scala.sys.exit
-
 object Main {
   def main(args: Array[String]): Unit = {
 
