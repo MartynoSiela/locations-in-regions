@@ -18,7 +18,7 @@ object Result {
     }
   }
 
-  implicit def generateResults(regions: Either[Error, List[Region]],
+  def generateResults(regions: Either[Error, List[Region]],
                                locations: Either[Error, List[Location]]
                               ):Either[Error, List[Result]]  = {
     (regions, locations) match {
@@ -37,7 +37,7 @@ object Result {
     }
   }
 
-  implicit def writeToFile(results: List[Result], filePath: String): Unit = {
+  def writeToFile(results: List[Result], filePath: String): Unit = {
     val fileWriter = new FileWriter(new File(filePath))
     fileWriter.write(results.asJson.toString())
     fileWriter.close()
