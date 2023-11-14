@@ -18,10 +18,8 @@ object Main {
 
     (argsMap.get("--regions"), argsMap.get("--locations"), argsMap.get("--output")) match
       case (Some(regionsPath), Some(locationsPath), Some(outputPath)) =>
-        val parserLocations = new ParserLocations()
-        val locations = parserLocations.parseToType(locationsPath)
-        val parserRegions = new ParserRegions()
-        val regions = parserRegions.parseToType(regionsPath)
+        val locations = ParserLocations.parseToType(locationsPath)
+        val regions = ParserRegions.parseToType(regionsPath)
         val results = Result.generateResults(regions, locations)
         results.match {
           case Right(results) => Result.writeToFile(results, outputPath)
