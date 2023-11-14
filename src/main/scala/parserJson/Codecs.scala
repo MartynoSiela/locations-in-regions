@@ -25,9 +25,9 @@ object Codecs {
     final def apply(a: Result): Json = {
       Json.obj(
         ("region", Json.fromString(a.region)),
-        ("matched_locations", Json.fromValues(a.matched_locations.map { location =>
-          Json.fromString(location)
-        }))
+        ("matched_locations", Json.fromValues(
+          for location <- a.matched_locations
+          yield Json.fromString(location)))
       )
     }
   }
