@@ -20,11 +20,13 @@ object Main {
       case (Some(regionsPath), Some(locationsPath), Some(outputPath)) =>
         val locations = ParserLocations.parseToType(locationsPath)
         val regions = ParserRegions.parseToType(regionsPath)
-        val results = Result.generateResults(regions, locations)
-        results.match {
-          case Right(results) => Result.writeToFile(results, outputPath)
-          case Left(error) => throw error
-        }
+        (regions, locations) match
+          case (Right(regionsValue), Right(locationsValue)) =>
+            val results = Result.generateResults(regionsValue, locationsValue)
+            Result.writeToFile(results, outputPath)
+          case (Left(_), Right(_)) => println("issue while parsing regions json")
+          case (Right(_), Left(_)) => println("issue while parsing locations json")
+          case (Left(_), Left(_)) => println("issue while parsing regions and locations json")
       case _ => println(usage)
   }
 }
