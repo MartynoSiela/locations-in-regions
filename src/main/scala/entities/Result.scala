@@ -13,7 +13,7 @@ object Result {
     yield
       val matchedLocationNames =
         for polygon <- region.polygons
-            location <- locations if region.isPointInPolygon(location.point, polygon)
+            location <- locations if Polygon.isPointInPolygon(location.point, polygon)
         yield location.name
       Result(region.name, matchedLocationNames)
   }
