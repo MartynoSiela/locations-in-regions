@@ -1,61 +1,30 @@
-import _root_.parser.{ParserLocations, ParserRegions}
+import _root_.parserJson.{ParserLocations, ParserRegions}
 import entities.Result
 import io.circe.syntax.*
-import scala.sys.exit
 
 object Main {
   def main(args: Array[String]): Unit = {
+
     val usage = """
         Usage: [--regions String] [--locations String] [--output String]
     """
 
-    var regionsFilePath = ""
-    var locationsFilePath = ""
-    var outputFilePath = ""
+    val argsMap = args
+      .sliding(2, 2)
+      .collect { case Array(key, value) => (key, value) }
+      .toMap
 
-    if (args.isEmpty || args.length % 2 != 0){
-      println(usage)
-      exit(1)
-    }
-
-    args.sliding(2, 2).toList.collect {
-      case Array("--regions", value: String) => regionsFilePath = value
-      case Array("--locations", value: String) => locationsFilePath = value
-      case Array("--output", value: String) => outputFilePath = value
-      case _ =>
-        println(usage)
-        exit(1)
-    }
-
-    val parserLocations = new ParserLocations()
-    val locations = locationsFilePath match {
-      case "" =>
-        println("Locations file location was not provided")
-        exit(1)
-      case _ => parserLocations.parseToType(locationsFilePath)
-    }
-
-    val parserRegions = new ParserRegions()
-    val regions = regionsFilePath match {
-      case "" =>
-        println("Regions file location was not provided")
-        exit(1)
-      case _ => parserRegions.parseToType(regionsFilePath)
-    }
-
-    val results = Result.generateResults(regions, locations)
-    results.match {
-      case Right(results) =>
-        outputFilePath match {
-          case "" =>
-            println("Output file location was not provided")
-            exit(1)
-          case _ => Result.writeToFile(results, outputFilePath)
-        }
-      case Left(error) => throw error
-    }
-
-    println("Finished")
-    exit(0)
+    (argsMap.get("--regions"), argsMap.get("--locations"), argsMap.get("--output")) match
+      case (Some(regionsPath), Some(locationsPath), Some(outputPath)) =>
+        val locations = ParserLocations.parseToType(locationsPath)
+        val regions = ParserRegions.parseToType(regionsPath)
+        (regions, locations) match
+          case (Right(regionsValue), Right(locationsValue)) =>
+            val results = Result.generateResults(regionsValue, locationsValue)
+            Result.writeToFile(results, outputPath)
+          case (Left(_), Right(_)) => println("issue while parsing regions json")
+          case (Right(_), Left(_)) => println("issue while parsing locations json")
+          case (Left(_), Left(_)) => println("issue while parsing regions and locations json")
+      case _ => println(usage)
   }
 }
