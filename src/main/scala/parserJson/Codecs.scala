@@ -12,7 +12,7 @@ object Codecs {
 
   implicit def decoderRegion: Decoder[Region] = (cursor: HCursor) =>
     for name <- cursor.get[String]("name")
-        coordinates <- cursor.get[Array[Array[Array[Double]]]]("coordinates")
+        coordinates <- cursor.get[List[List[List[Double]]]]("coordinates")
         polygons =
           for polygonArray <- coordinates
               points =

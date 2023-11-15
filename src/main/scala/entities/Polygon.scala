@@ -1,3 +1,3 @@
 package entities
 
-case class Polygon(points: Array[Point])
+case class Polygon(points: List[Point])

@@ -2,21 +2,25 @@ package entities
 
 import io.circe._
 
-case class Region(name: String, polygons: Array[Polygon])  {
+case class Region(name: String, polygons: List[Polygon])  {
   def isPointInPolygon(point: Point, polygon: Polygon): Boolean = {
-    var countOfCrossesIsOdd: Boolean = false
-    var i = 0
-    var j = polygon.points.length - 1
-    while (i < polygon.points.length) {
-      if (((polygon.points(i).longtitude >= point.longtitude) != (polygon.points(j).longtitude >= point.longtitude)) &&
-        (point.latitude <=
-          (polygon.points(j).latitude - polygon.points(i).latitude) *
-            (point.longtitude - polygon.points(i).longtitude) /
-            (polygon.points(j).longtitude - polygon.points(i).longtitude) + polygon.points(i).latitude)
-      ) countOfCrossesIsOdd = !countOfCrossesIsOdd
-      j = i
-      i += 1
-    }
-    countOfCrossesIsOdd
+    if (polygon.points == List.empty[Point])
+      return false
+    else
+      (polygon.points.last :: polygon.points).sliding(2).foldLeft(false) {
+        case (countOfCrossesIsOdd, List(edgePoint1, edgePoint2)) =>
+          val condition = {
+            (
+              (edgePoint1.longtitude >= point.longtitude) != (edgePoint2.longtitude >= point.longtitude)
+            ) &&
+            (
+              point.latitude <=
+              (edgePoint2.latitude - edgePoint1.latitude) *
+              (point.longtitude - edgePoint1.longtitude) /
+              (edgePoint2.longtitude - edgePoint1.longtitude) + edgePoint1.latitude
+            )
+          }
+          if (condition) !countOfCrossesIsOdd else countOfCrossesIsOdd
+      }
   }
 }

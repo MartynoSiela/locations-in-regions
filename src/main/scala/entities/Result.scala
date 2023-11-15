@@ -5,7 +5,7 @@ import io.circe.{Error}
 import io.circe.syntax.*
 import parserJson.Codecs.encoderResult
 
-case class Result(region: String, matched_locations: Array[String])
+case class Result(region: String, matched_locations: List[String])
 
 object Result {
   def generateResults(regions: List[Region], locations: List[Location]): List[Result]  = {
