@@ -20,7 +20,6 @@ class PointAgainstSquarePolygon extends AnyFunSuite {
   val pointOnEdge3 = Point(2.5, 3)
   val pointOnEdge4 = Point(2, 2.5)
 
-
   test("point1 inside of polygon is seen as inside") {
     assert(Polygon.isPointInPolygon(pointInside1, squarePolygon) == true)
   }
